@@ -1,32 +1,62 @@
 import { useState } from 'react';
-import {View,Modal, TextInput, Button,StyleSheet, Image} from 'react-native'
-
+import {View,Modal, Alert, TextInput, Button,StyleSheet, Image} from 'react-native'
+import Icon from '../assets/images/todoIcon.png'
 function GoalInput(props){
     const[enteredGoalText, setEnteredGoalText] = useState('')
 
-
+      const createTwoButtonAlert = () =>
+    Alert.alert(
+      "Error",
+      "An Empty task cannot be added",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ]
+    );
+      
+    // const isEntered =()=>(enteredGoalText.length !== 0)
+    
     function goalInputHandler(enteredText){
-      setEnteredGoalText(enteredText)}
-
-      function addGoalHandler(){
-            props.onAddGoal(enteredGoalText)
-            setEnteredGoalText('')
+      setEnteredGoalText(enteredText)
+      
+    }
+    
+    function addGoalHandler(){
+      props.onAddGoal(enteredGoalText)
+      setEnteredGoalText('')
+      
       }
 
     return(
         <Modal visible={props.visible} animationType="slide">
         <View style={styles.inputContainer}>
-            <Image style={styles.image} source={require('../assets/images/goal.png')} />
+            <Image style={styles.image} source={Icon} />
       <TextInput style={styles.textInput} 
        placeholder='Your course Goal'
         onChangeText={goalInputHandler} 
         value={enteredGoalText}
+        multiline
         />
         <View style={styles.buttonContainer}>
-            <View style={styles.button}>
-      <Button  title='Add Goal' color={'#5e0acc'} onPress={addGoalHandler}/>
+            <View style={styles.button}>  
+            { enteredGoalText ?
+              <Button  title='Add Goal' color={'#7DF9FF'}  
+              onPress={
+                addGoalHandler
+              }/>  :
+              <Button  title=' Add Goal' color={'grey'}  
+              onPress={
+                createTwoButtonAlert
+              }/>
+            }
+      
             </View>
             <View style={styles.button}>
+              
       <Button title='cancel' color={'#f31282'} onPress={props.closeModal}   />
             </View>
                 
